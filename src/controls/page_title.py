@@ -13,7 +13,7 @@ class PageTitle(ft.Container):
                         on_click=self.__show_drawer
                     ),
                     ft.WindowDragArea(ft.Container(
-                            ft.Text(self.title, color='#ff5722', weight=ft.FontWeight.BOLD, size=18),
+                            ft.Text(self.title, color='#ff5722', weight=ft.FontWeight.BOLD, size=18, no_wrap=True),
                             padding=10
                         ),
                         expand=True

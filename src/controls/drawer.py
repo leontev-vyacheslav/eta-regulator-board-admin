@@ -38,26 +38,31 @@ class Drawer(ft.NavigationDrawer):
             )
         ]
 
+        self.themeItemRef.current.value = 'Light Theme' if self.page.theme_mode == ft.ThemeMode.DARK else 'Dark Theme'
+        self.themeIconRef.current.name = ft.icons.LIGHT_MODE_OUTLINED if self.page.theme_mode == ft.ThemeMode.DARK else ft.icons.DARK_MODE_OUTLINED
+
 
     def __toggle_theme(self):
         self.page.theme_mode = ft.ThemeMode.LIGHT if self.page.theme_mode == ft.ThemeMode.DARK else ft.ThemeMode.DARK
         self.themeItemRef.current.value = 'Light Theme' if self.page.theme_mode == ft.ThemeMode.DARK else 'Dark Theme'
         self.themeIconRef.current.name = ft.icons.LIGHT_MODE_OUTLINED if self.page.theme_mode == ft.ThemeMode.DARK else ft.icons.DARK_MODE_OUTLINED
+        self.page.client_storage.set('theme_mode', self.page.theme_mode.value)
         self.page.update()
 
     def __show_about_dialog(self):
 
         self.page.dialog = ft.AlertDialog(
+            shape=ft.RoundedRectangleBorder(radius=5),
             modal=True,
             title=ft.Text('About'),
             content=ft.Row(
                 controls=[
                     ft.Image('src/assets/icon.ico'),
-                    ft.Text('ETA RegulatorBoard Admin' ),
+                    ft.Text('ETA RegulatorBoard Admin v. 0.1' ),
                 ], width=450
             ),
             actions=[
-                ft.ElevatedButton('OK', on_click=lambda _: self.__close_about_dlg(), width=100, height=35),
+                ft.ElevatedButton('OK', style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=5)), on_click=lambda _: self.__close_about_dlg(), width=100, height=35),
             ],
             actions_alignment=ft.MainAxisAlignment.END,
         )
