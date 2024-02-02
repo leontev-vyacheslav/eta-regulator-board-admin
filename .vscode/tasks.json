@@ -1,0 +1,27 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+	  {
+		"label": "build",
+		"type": "shell",
+		"command": "cd src;flet build windows --module-name main.py --output ../native_build --project eta-regulator-board-admin;cd ..",
+		"args": [
+		],
+		"group": {
+		  "kind": "build",
+		  "isDefault": true
+		}
+	  },
+	  {
+		"label": "pack",
+		"type": "shell",
+		"command": "flet pack src/main.py -i src/assets/icon.ico --name eta-regulator-board-admin --distpath ./dist ;cd ..",
+		"args": [
+		],
+		"group": {
+		  "kind": "build",
+		  "isDefault": true
+		}
+	  }
+	]
+  }
