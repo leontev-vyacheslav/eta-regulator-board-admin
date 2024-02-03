@@ -7,10 +7,8 @@ class DrawerHeader(ft.Container):
 
     def __init__(self, page: ft.Page):
         super().__init__()
-
         self.page = page
-
-        self.margin=Margin(right=10, top=10, left=0, bottom=0)
+        self.margin = Margin(right=10, top=10, left=0, bottom=0)
 
         self.content=ft.Row(
             controls=[

@@ -1,8 +1,8 @@
+from dataclasses import dataclass
 
-from pydantic import BaseModel
-
-
-class RegulatorDeviceModel(BaseModel):
+@dataclass
+class RegulatorDeviceModel:
     id: str
     mac: str
     name: str
+    master_key: str

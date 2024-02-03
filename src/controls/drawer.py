@@ -3,20 +3,21 @@ import flet as ft
 from controls.drawer_header import DrawerHeader
 
 
-
 class Drawer(ft.NavigationDrawer):
 
     def __init__(self, page: ft.Page):
         super().__init__()
-
         self.page = page
+
         self.themeItemRef = ft.Ref()
         self.themeIconRef = ft.Ref()
+        self.listRef = ft.Ref()
 
         self.controls = [
-            DrawerHeader(page=self.page),
+            DrawerHeader(self.page),
 
             ft.ListView(
+                ref=self.listRef,
                 controls=[
                     ft.ListTile(
                         leading=ft.Icon(ft.icons.APP_REGISTRATION),
@@ -37,17 +38,23 @@ class Drawer(ft.NavigationDrawer):
                 ]
             )
         ]
-
-        self.themeItemRef.current.value = 'Light Theme' if self.page.theme_mode == ft.ThemeMode.DARK else 'Dark Theme'
-        self.themeIconRef.current.name = ft.icons.LIGHT_MODE_OUTLINED if self.page.theme_mode == ft.ThemeMode.DARK else ft.icons.DARK_MODE_OUTLINED
+        current_theme = ft.ThemeMode(self.page.client_storage.get('theme_mode'))
+        self.themeItemRef.current.value = 'Light Theme' if current_theme == ft.ThemeMode.DARK else 'Dark Theme'
+        self.themeIconRef.current.name = ft.icons.LIGHT_MODE_OUTLINED if current_theme == ft.ThemeMode.DARK else ft.icons.DARK_MODE_OUTLINED
 
 
     def __toggle_theme(self):
-        self.page.theme_mode = ft.ThemeMode.LIGHT if self.page.theme_mode == ft.ThemeMode.DARK else ft.ThemeMode.DARK
-        self.themeItemRef.current.value = 'Light Theme' if self.page.theme_mode == ft.ThemeMode.DARK else 'Dark Theme'
-        self.themeIconRef.current.name = ft.icons.LIGHT_MODE_OUTLINED if self.page.theme_mode == ft.ThemeMode.DARK else ft.icons.DARK_MODE_OUTLINED
-        self.page.client_storage.set('theme_mode', self.page.theme_mode.value)
+        current_theme = ft.ThemeMode(self.page.client_storage.get('theme_mode'))
+
+        current_theme = ft.ThemeMode.LIGHT if current_theme == ft.ThemeMode.DARK else ft.ThemeMode.DARK
+        self.themeItemRef.current.value = 'Light Theme' if current_theme == ft.ThemeMode.DARK else 'Dark Theme'
+        self.themeIconRef.current.name = ft.icons.LIGHT_MODE_OUTLINED if current_theme == ft.ThemeMode.DARK else ft.icons.DARK_MODE_OUTLINED
+
+        self.page.client_storage.set('theme_mode', current_theme.value)
+        self.page.theme_mode = current_theme
+
         self.page.update()
+
 
     def __show_about_dialog(self):
 
