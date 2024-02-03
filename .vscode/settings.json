@@ -9,6 +9,9 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
-        "**/__pycache__": true
+        "**/__pycache__": true,
+        "build": true,
+        "dist": true,
+        "native_build": true,
     }
 }

@@ -10,6 +10,9 @@ from models.regulator_device_model import RegulatorDeviceModel
 
 
 def main(page: ft.Page):
+
+    page.theme = ft.Theme(color_scheme_seed=ft.colors.INDIGO)
+
     page.window_title_bar_hidden = True
     page.window_title_bar_buttons_hidden = True
     page.window_width = 1024
@@ -22,7 +25,7 @@ def main(page: ft.Page):
           RegulatorDeviceModel(
               id=uuid.uuid4().__str__(),
               name='omega-8f79',
-              mac='40:a3:6b:c9:8f:7b',
+              mac_address='40:a3:6b:c9:8f:7b',
               master_key='XAMhI3XWj+PaXP5nRQ+nNpEn9DKyHPTVa95i89UZL6o='
             )
       ])

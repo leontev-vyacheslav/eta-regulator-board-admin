@@ -1,6 +1,8 @@
 import flet as ft
 
 from controls.drawer_header import DrawerHeader
+from controls.regulator_device_edit_dialog import RegulatorDeviceEditDialog
+from models.regulator_device_model import RegulatorDeviceModel
 
 
 class Drawer(ft.NavigationDrawer):
@@ -19,6 +21,12 @@ class Drawer(ft.NavigationDrawer):
             ft.ListView(
                 ref=self.listRef,
                 controls=[
+                    ft.ListTile(
+                        leading=ft.Icon(ft.icons.DEVICES),
+                        title=ft.Text('Add device'),
+                        on_click=lambda _: self.__show_regulator_device_edit_dialog(RegulatorDeviceModel(id='', mac_address='', master_key='', name='Omega-xxx')),
+                    ),
+                    ft.Divider(height=10),
                     ft.ListTile(
                         leading=ft.Icon(ft.icons.APP_REGISTRATION),
                         title=ft.Text('About'),
@@ -43,6 +51,13 @@ class Drawer(ft.NavigationDrawer):
         self.themeIconRef.current.name = ft.icons.LIGHT_MODE_OUTLINED if current_theme == ft.ThemeMode.DARK else ft.icons.DARK_MODE_OUTLINED
 
 
+    def __show_regulator_device_edit_dialog(self, device: RegulatorDeviceModel):
+        self.open = False
+
+        self.page.dialog = RegulatorDeviceEditDialog(self.page, device)
+        self.page.dialog.open = True
+        self.page.update()
+
     def __toggle_theme(self):
         current_theme = ft.ThemeMode(self.page.client_storage.get('theme_mode'))
 
@@ -57,6 +72,7 @@ class Drawer(ft.NavigationDrawer):
 
 
     def __show_about_dialog(self):
+        self.open = False
 
         self.page.dialog = ft.AlertDialog(
             shape=ft.RoundedRectangleBorder(radius=5),
