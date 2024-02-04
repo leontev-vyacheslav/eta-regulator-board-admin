@@ -28,7 +28,6 @@ class AccessTokenDialog(ft.AlertDialog):
                         value=f'{(datetime.now() + timedelta(hours=8)):%d.%m.%Y %H:%M}',
                     ),
                 ],
-                width=450,
                 expand=True
             ),
             ft.Row(
@@ -38,15 +37,17 @@ class AccessTokenDialog(ft.AlertDialog):
                         label=f'Access Token',
                         expand=True,
                         value=self.__generate_access_token(),
+                        read_only=True,
+
+                        suffix=ft.Row(controls=[
+                            ft.IconButton(ft.icons.REFRESH_OUTLINED,  on_click=lambda _: self.__refresh_access_token(), scale=0.9),
+                            ft.IconButton(ft.icons.COPY, on_click=lambda _: self.__copy_to_clipboard(), scale=0.9),
+                        ], alignment=ft.MainAxisAlignment.END, tight=True)
                     ),
                 ],
-                width=450,
+                width=640,
                 expand=True
             ),
-            ft.Row(controls=[
-                ft.IconButton(ft.icons.REFRESH_OUTLINED, on_click=lambda _: self.__refresh_access_token()),
-                ft.IconButton(ft.icons.COPY, on_click=lambda _: self.__copy_to_clipboard()),
-            ], alignment=ft.MainAxisAlignment.END),
         ], height=220)
 
         self.actions=[

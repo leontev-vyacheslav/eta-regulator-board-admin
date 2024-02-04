@@ -19,16 +19,16 @@ def main(page: ft.Page):
     page.window_min_width = 640
     page.window_max_width = 1024
 
-    page.client_storage.remove('devices')
-    if page.client_storage.get('devices') is None:
-      page.client_storage.set('devices', [
-          RegulatorDeviceModel(
-              id=uuid.uuid4().__str__(),
-              name='omega-8f79',
-              mac_address='40:a3:6b:c9:8f:7b',
-              master_key='XAMhI3XWj+PaXP5nRQ+nNpEn9DKyHPTVa95i89UZL6o='
-            )
-      ])
+    # page.client_storage.remove('devices')
+    # if page.client_storage.get('devices') is None:
+    #   page.client_storage.set('devices', [
+    #       RegulatorDeviceModel(
+    #           id=uuid.uuid4().__str__(),
+    #           name='omega-8f79',
+    #           mac_address='40:a3:6b:c9:8f:7b',
+    #           master_key='XAMhI3XWj+PaXP5nRQ+nNpEn9DKyHPTVa95i89UZL6o='
+    #         )
+    #   ])
 
 
     if page.client_storage.get('theme_mode'):

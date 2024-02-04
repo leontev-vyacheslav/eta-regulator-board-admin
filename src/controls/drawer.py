@@ -52,7 +52,6 @@ class Drawer(ft.NavigationDrawer):
 
 
     def __show_regulator_device_edit_dialog(self, device: RegulatorDeviceModel):
-        self.open = False
 
         self.page.dialog = RegulatorDeviceEditDialog(self.page, device)
         self.page.dialog.open = True
@@ -72,9 +71,8 @@ class Drawer(ft.NavigationDrawer):
 
 
     def __show_about_dialog(self):
-        self.open = False
-
-        self.page.dialog = ft.AlertDialog(
+       
+        self.about_dialog = ft.AlertDialog(
             shape=ft.RoundedRectangleBorder(radius=5),
             modal=True,
             title=ft.Text('About'),
@@ -88,11 +86,16 @@ class Drawer(ft.NavigationDrawer):
                 ft.ElevatedButton('OK', style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=5)), on_click=lambda _: self.__close_about_dlg(), width=100, height=35),
             ],
             actions_alignment=ft.MainAxisAlignment.END,
+            on_dismiss=lambda e: print("Modal dialog dismissed!"),
         )
 
-        self.page.dialog.open = True
+        self.page.dialog = self.about_dialog
+
+        self.about_dialog.open = True
         self.page.update()
+        pass
 
     def __close_about_dlg(self):
-        self.page.dialog.open = False
+
+        self.about_dialog.open = False
         self.page.update()
