@@ -15,7 +15,18 @@
 	  {
 		"label": "pack",
 		"type": "shell",
-		"command": "flet pack src/main.py -i src/assets/icon.ico --name eta-regulator-board-admin --distpath ./dist ;cd ..",
+		"command": "flet pack src/main.py -i src/assets/icon.ico --name eta-regulator-board-admin --distpath ./dist;cd ..",
+		"args": [
+		],
+		"group": {
+		  "kind": "build",
+		  "isDefault": true
+		}
+	  },
+	  {
+		"label": "linux-pack",
+		"type": "shell",
+		"command": "source ./.venv/bin/activate&&flet pack src/main.py -i src/assets/icon.ico --name eta-regulator-board-admin --distpath ./dist&&cd ..",
 		"args": [
 		],
 		"group": {
