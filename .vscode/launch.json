@@ -1,10 +1,18 @@
 {
     "configurations": [
         {
-            "name": "debug",
+            "name": "windows",
             "type": "debugpy",
             "request": "launch",
             "program": ".venv/scripts/flet.exe",
+            "args": ["run",  "src/main.py", "-d",],
+            "pythonArgs": ["-Xfrozen_modules=off"],
+        },
+        {
+            "name": "linux",
+            "type": "debugpy",
+            "request": "launch",
+            "program": ".venv/bin/flet",
             "args": ["run",  "src/main.py", "-d",],
             "pythonArgs": ["-Xfrozen_modules=off"],
         }
