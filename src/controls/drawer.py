@@ -1,4 +1,6 @@
 import flet as ft
+import json
+import pathlib
 
 from controls.drawer_header import DrawerHeader
 from controls.regulator_device_edit_dialog import RegulatorDeviceEditDialog
@@ -28,6 +30,17 @@ class Drawer(ft.NavigationDrawer):
                     ),
                     ft.Divider(height=10),
                     ft.ListTile(
+                        leading=ft.Icon(ft.icons.DOWNLOAD),
+                        title=ft.Text('Download devices'),
+                        on_click=lambda _: self._download_devices(),
+                    ),
+                    ft.ListTile(
+                        leading=ft.Icon(ft.icons.UPLOAD),
+                        title=ft.Text('Upload devices'),
+                        on_click=lambda _: self._upload_devices(),
+                    ),
+                    ft.Divider(height=10),
+                    ft.ListTile(
                         leading=ft.Icon(ft.icons.APP_REGISTRATION),
                         title=ft.Text('About'),
                         on_click=lambda _: self._show_about_dialog(),
@@ -50,6 +63,38 @@ class Drawer(ft.NavigationDrawer):
         self.themeItemRef.current.value = 'Light Theme' if current_theme == ft.ThemeMode.DARK else 'Dark Theme'
         self.themeIconRef.current.name = ft.icons.LIGHT_MODE_OUTLINED if current_theme == ft.ThemeMode.DARK else ft.icons.DARK_MODE_OUTLINED
 
+    def _upload_devices(self):
+        def _open_devices_callback(e: ft.FilePickerResultEvent):
+            if e.files and len(e.files):
+                with open(e.files[0].path, 'r') as f:
+                    devices = json.loads(f.read())
+
+                self.page.client_storage.set('devices', devices)
+                self.page.update()
+
+        file_piker = ft.FilePicker(on_result=lambda e: _open_devices_callback(e))
+        self.page.add(file_piker)
+        file_piker.pick_files()
+        self.page.update()
+
+    def _download_devices(self):
+        def _save_devices_callback(e: ft.FilePickerResultEvent):
+            if e.path:
+                devices = self.page.client_storage.get('devices')
+                if devices is None:
+                    devices = []
+
+                json_text = json.dumps(devices)
+                path = pathlib.Path(e.path)
+                if path.suffix != '.json':
+                    e.path = f'{e.path}.json'
+
+                with open(e.path, 'w') as f:
+                    f.write(json_text)
+
+        file_piker = ft.FilePicker(on_result=lambda e: _save_devices_callback(e))
+        self.page.add(file_piker)
+        file_piker.save_file(file_type='json', allowed_extensions=['*.json'])
 
     def _add_regulator_device(self):
 
@@ -75,7 +120,11 @@ class Drawer(ft.NavigationDrawer):
         self.about_dialog = ft.AlertDialog(
             shape=ft.RoundedRectangleBorder(radius=5),
             modal=True,
-            title=ft.Text('About'),
+            title = ft.Row(controls=[
+                ft.Text('About', size=24, expand=True, color='#ff5722'),
+                ft.IconButton(ft.icons.CLOSE, on_click=lambda _: self._close_about_dlg())
+            ]),
+            title_padding = 18,
             content=ft.Row(
                 controls=[
                     ft.Image('src/assets/icon.ico'),
@@ -86,7 +135,6 @@ class Drawer(ft.NavigationDrawer):
                 ft.ElevatedButton('OK', style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=5)), on_click=lambda _: self._close_about_dlg(), width=100, height=35),
             ],
             actions_alignment=ft.MainAxisAlignment.END,
-            on_dismiss=lambda e: print("Modal dialog dismissed!"),
         )
 
         self.page.dialog = self.about_dialog

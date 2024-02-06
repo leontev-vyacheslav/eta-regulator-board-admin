@@ -15,7 +15,7 @@ class PageTitle(ft.Container):
                         on_click=self.__show_drawer
                     ),
                     ft.WindowDragArea(ft.Container(
-                            ft.Text(self.title, color='#ff5722', weight=ft.FontWeight.BOLD, size=18, no_wrap=True),
+                            ft.Text(self.title, color='#ff5722', size=24, no_wrap=True),
                             padding=10
                         ),
                         expand=True
@@ -37,7 +37,11 @@ class PageTitle(ft.Container):
             shape=ft.RoundedRectangleBorder(radius=5),
             open=True,
             modal=True,
-            title=ft.Text('Confirm'),
+            title = ft.Row(controls=[
+                ft.Text('Confirm', size=24, expand=True, color='#ff5722'),
+                ft.IconButton(ft.icons.CLOSE, on_click=lambda _: __close_alert_dialog())
+            ]),
+            title_padding = 18,
             content=ft.Row(
                 controls=[
                     ft.Text('Do you really want to close the application?' ),

@@ -14,7 +14,11 @@ class AccessTokenDialog(ft.AlertDialog):
         self.expirationTimeTextFieldRef = ft.Ref[ft.TextField]()
         self.device = device
         self.shape = ft.RoundedRectangleBorder(radius=5)
-        self.title = ft.Text(f'Generate access token')
+        self.title = ft.Row(controls=[
+            ft.Text('Generate access token', size=24, expand=True, color='#ff5722'),
+            ft.IconButton(ft.icons.CLOSE, on_click=lambda _: self.__close_dlg())
+        ])
+        self.title_padding=18
         self.modal = True
         self.expand = False
         self.content = ft.Column(controls=[

@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 import flet as ft
 from controls.access_token_dialog import AccessTokenDialog
@@ -38,7 +39,14 @@ class RegulatorDeviceListView(ft.ListView):
 
     def _get_items(self):
         devices = self.page.client_storage.get('devices')
-        devices = [RegulatorDeviceModel(**i) for i in devices] if devices is not None else []
+        devices = [RegulatorDeviceModel(
+            id=i['id'],
+            name=i['name'],
+            mac_address=i['mac_address'],
+            master_key=i['master_key'],
+            creation_date=datetime.fromisoformat(i['creation_date']),
+        ) for i in devices] if devices is not None else []
+        pass
 
         list_items = [
             ft.ListTile(

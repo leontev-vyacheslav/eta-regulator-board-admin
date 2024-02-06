@@ -7,4 +7,4 @@ class RegulatorDeviceModel:
     mac_address: str
     name: str
     master_key: str
-    creation_date: datetime | None = field()
+    creation_date: datetime

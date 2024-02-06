@@ -1,4 +1,5 @@
 import base64
+import datetime
 from enum import IntEnum
 import os
 import re
@@ -23,7 +24,8 @@ class RegulatorDeviceEditDialog(ft.AlertDialog):
                 id='',
                 name='Omega-XXXX',
                 mac_address='',
-                master_key=''
+                master_key='',
+                creation_date=datetime.datetime.now()
             )
         else:
             self.mode = RegulatorDeviceEditDialogMode.EDIT
@@ -35,9 +37,14 @@ class RegulatorDeviceEditDialog(ft.AlertDialog):
         self.name_text_field_ref = ft.Ref[ft.TextField]()
         self.mac_address_text_field_ref = ft.Ref[ft.TextField]()
         self.master_key_text_field_ref = ft.Ref[ft.TextField]()
+        self.creation_date_text_field_ref = ft.Ref[ft.TextField]()
 
         self.shape = ft.RoundedRectangleBorder(radius=5)
-        self.title = ft.Text(f'{"New" if self.mode == RegulatorDeviceEditDialogMode.NEW else "Edit"} regulator device')
+        self.title = ft.Row(controls=[
+            ft.Text(f'{"New" if self.mode == RegulatorDeviceEditDialogMode.NEW else "Edit"} regulator device', expand=True, size=24, color='#ff5722'),
+            ft.IconButton(ft.icons.CLOSE, on_click=lambda _: self._close_dlg())
+        ])
+        self.title_padding = 18
         self.modal = True
         self.expand = False
 
@@ -93,7 +100,19 @@ class RegulatorDeviceEditDialog(ft.AlertDialog):
                 ],
                 expand=True
             ),
-        ], tight=True, height=320)
+            ft.Row(
+                controls=[
+                    ft.TextField(
+                        ref=self.creation_date_text_field_ref,
+                        label=f'Creation date',
+                        read_only=True,
+                        expand=True,
+                        value=self.device.creation_date.isoformat(),
+                    ),
+                ],
+                expand=True
+            ),
+        ], tight=True, height=480)
         self.actions=[
             ft.ElevatedButton(
                 text='ADD' if self.mode == RegulatorDeviceEditDialogMode.NEW else 'UPDATE',
@@ -134,19 +153,25 @@ class RegulatorDeviceEditDialog(ft.AlertDialog):
     def _on_mac_address_text_field_change(self, e):
         cleaned_value = re.sub(r'[^a-fA-F0-9]', '', e.control.value)
         formatted_value = ':'.join( re.findall(r'.{1,2}', cleaned_value)[0:6])
-
         e.control.value = formatted_value;
         e.control.update()
 
 
     def _update_or_create_device(self):
         devices = self.page.client_storage.get('devices')
-        devices = [RegulatorDeviceModel(**i) for i in devices] if devices is not None else []
+        devices = devices = [RegulatorDeviceModel(
+            id=d['id'],
+            name=d['name'],
+            mac_address=d['mac_address'],
+            master_key=d['master_key'],
+            creation_date=datetime.datetime.fromisoformat(d['creation_date'])
+            ) for d in devices] if devices is not None else []
 
         self.device.id = self.id_text_field_ref.current.value
         self.device.name = self.name_text_field_ref.current.value
         self.device.mac_address = self.mac_address_text_field_ref.current.value
         self.device.master_key = self.master_key_text_field_ref.current.value
+        self.device.creation_date = datetime.datetime.fromisoformat(self.creation_date_text_field_ref.current.value)
 
         if self.mode == RegulatorDeviceEditDialogMode.NEW:
             devices.append(self.device)
@@ -156,7 +181,16 @@ class RegulatorDeviceEditDialog(ft.AlertDialog):
                 devices.remove(original_device)
                 devices.append(self.device)
 
-        self.page.client_storage.set('devices', devices)
+        self.page.client_storage.set('devices',
+            [{
+                'id': d.id,
+                'name': d.name,
+                'mac_address': d.mac_address,
+                'master_key': d.master_key,
+                'creation_date': d.creation_date.isoformat()
+            }
+            for d in devices]
+        )
 
         self.open = False
         self.page.update()
