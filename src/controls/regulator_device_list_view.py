@@ -7,28 +7,36 @@ from models.regulator_device_model import RegulatorDeviceModel
 
 class RegulatorDeviceListView(ft.ListView):
 
-    def __init__(self, page: ft.Page, devices: List[RegulatorDeviceModel] = []):
+    def __init__(self, ref: ft.Ref, page: ft.Page, devices: List[RegulatorDeviceModel] = []):
         self.page = page
+
+        self.name = 'app_list_view'
         super().__init__(
+            ref=ref,
             expand=True,
             spacing=10,
             padding=10,
-            controls=self.__get_items()
+            controls=self._get_items()
         )
 
+    def update(self):
+        self.clean()
+        self.controls = self._get_items()
 
-    def __show_access_token_dialog(self, device: RegulatorDeviceModel):
+        return super().update()
+
+    def _show_access_token_dialog(self, device: RegulatorDeviceModel):
         self.page.dialog = AccessTokenDialog(self.page, device)
         self.page.dialog.open = True
         self.page.update()
 
-    def __show_regulator_device_edit_dialog(self, device: RegulatorDeviceModel):
+    def _show_regulator_device_edit_dialog(self, device: RegulatorDeviceModel):
         self.page.dialog = RegulatorDeviceEditDialog(self.page, device)
         self.page.dialog.open = True
         self.page.update()
 
 
-    def __get_items(self):
+    def _get_items(self):
         devices = self.page.client_storage.get('devices')
         devices = [RegulatorDeviceModel(**i) for i in devices] if devices is not None else []
 
@@ -42,14 +50,14 @@ class RegulatorDeviceListView(ft.ListView):
                         ft.PopupMenuItem(
                             icon=ft.icons.EDIT,
                             text='Edit device',
-                            on_click=lambda e: self.__show_regulator_device_edit_dialog(e.control.data),
+                            on_click=lambda e: self._show_regulator_device_edit_dialog(e.control.data),
                             data=device
                         ),
                         ft.PopupMenuItem(),
                         ft.PopupMenuItem(
                             icon=ft.icons.KEY_OUTLINED,
                             text='Generate access token',
-                            on_click=lambda e: self.__show_access_token_dialog(e.control.data),
+                            on_click=lambda e: self._show_access_token_dialog(e.control.data),
                             data=device
                         )
                     ],

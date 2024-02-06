@@ -1,10 +1,9 @@
+from datetime import datetime, timedelta
 import flet as ft
 
 from controls.drawer import Drawer
 from controls.page_title import PageTitle
 from controls.regulator_device_list_view import RegulatorDeviceListView
-import random
-import uuid
 
 from models.regulator_device_model import RegulatorDeviceModel
 
@@ -20,15 +19,29 @@ def main(page: ft.Page):
     page.window_max_width = 1024
 
     # page.client_storage.remove('devices')
-    # if page.client_storage.get('devices') is None:
-    #   page.client_storage.set('devices', [
-    #       RegulatorDeviceModel(
-    #           id=uuid.uuid4().__str__(),
-    #           name='omega-8f79',
-    #           mac_address='40:a3:6b:c9:8f:7b',
-    #           master_key='XAMhI3XWj+PaXP5nRQ+nNpEn9DKyHPTVa95i89UZL6o='
-    #         )
-    #   ])
+    devices = page.client_storage.get('devices')
+    if devices is not None:
+
+      devices = [RegulatorDeviceModel(
+          id=d['id'],
+          name=d['name'],
+          mac_address=d['mac_address'],
+          master_key=d['master_key'],
+          creation_date=datetime.now()
+        ) for d in devices]
+
+      for i, d in enumerate(devices):
+          d.creation_date = datetime.now() + timedelta(days=i)
+
+    page.client_storage.set('devices',
+        [{
+            'id': d.id,
+            'name': d.name,
+            'mac_address': d.mac_address,
+            'master_key': d.master_key,
+            'creation_date': d.creation_date.isoformat()
+        }
+        for d in devices])
 
 
     if page.client_storage.get('theme_mode'):
@@ -37,6 +50,7 @@ def main(page: ft.Page):
         page.client_storage.set('theme_mode', page.theme_mode.value)
 
     page.drawer = Drawer(page)
+    page.app_list_view = ft.Ref[ft.ListView]()
 
     page.add(
         ft.Row(
@@ -47,7 +61,10 @@ def main(page: ft.Page):
         ),
         ft.Row(
             controls=[
-                RegulatorDeviceListView(page=page)
+                RegulatorDeviceListView(
+                    ref=page.app_list_view,
+                    page=page
+                )
             ],
             expand=True,
             vertical_alignment=ft.CrossAxisAlignment.STRETCH

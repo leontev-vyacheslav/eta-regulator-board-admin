@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from datetime import datetime
 
 @dataclass
 class RegulatorDeviceModel:
@@ -6,3 +7,4 @@ class RegulatorDeviceModel:
     mac_address: str
     name: str
     master_key: str
+    creation_date: datetime | None = field()

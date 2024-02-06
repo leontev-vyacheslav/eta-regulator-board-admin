@@ -24,18 +24,18 @@ class Drawer(ft.NavigationDrawer):
                     ft.ListTile(
                         leading=ft.Icon(ft.icons.DEVICES),
                         title=ft.Text('Add device'),
-                        on_click=lambda _: self.__show_regulator_device_edit_dialog(RegulatorDeviceModel(id='', mac_address='', master_key='', name='Omega-xxx')),
+                        on_click=lambda _: self._add_regulator_device(),
                     ),
                     ft.Divider(height=10),
                     ft.ListTile(
                         leading=ft.Icon(ft.icons.APP_REGISTRATION),
                         title=ft.Text('About'),
-                        on_click=lambda _: self.__show_about_dialog(),
+                        on_click=lambda _: self._show_about_dialog(),
                     ),
                      ft.ListTile(
                         leading=ft.Icon(ref=self.themeIconRef, name=ft.icons.LIGHT_MODE_OUTLINED),
                         title=ft.Text(ref=self.themeItemRef, value='Light Theme'),
-                        on_click=lambda _: self.__toggle_theme(),
+                        on_click=lambda _: self._toggle_theme(),
                     ),
                     ft.Divider(height=10),
                     ft.ListTile(
@@ -51,13 +51,13 @@ class Drawer(ft.NavigationDrawer):
         self.themeIconRef.current.name = ft.icons.LIGHT_MODE_OUTLINED if current_theme == ft.ThemeMode.DARK else ft.icons.DARK_MODE_OUTLINED
 
 
-    def __show_regulator_device_edit_dialog(self, device: RegulatorDeviceModel):
+    def _add_regulator_device(self):
 
-        self.page.dialog = RegulatorDeviceEditDialog(self.page, device)
+        self.page.dialog = RegulatorDeviceEditDialog(page=self.page, device=None)
         self.page.dialog.open = True
         self.page.update()
 
-    def __toggle_theme(self):
+    def _toggle_theme(self):
         current_theme = ft.ThemeMode(self.page.client_storage.get('theme_mode'))
 
         current_theme = ft.ThemeMode.LIGHT if current_theme == ft.ThemeMode.DARK else ft.ThemeMode.DARK
@@ -70,8 +70,8 @@ class Drawer(ft.NavigationDrawer):
         self.page.update()
 
 
-    def __show_about_dialog(self):
-       
+    def _show_about_dialog(self):
+
         self.about_dialog = ft.AlertDialog(
             shape=ft.RoundedRectangleBorder(radius=5),
             modal=True,
@@ -83,7 +83,7 @@ class Drawer(ft.NavigationDrawer):
                 ], width=450
             ),
             actions=[
-                ft.ElevatedButton('OK', style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=5)), on_click=lambda _: self.__close_about_dlg(), width=100, height=35),
+                ft.ElevatedButton('OK', style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=5)), on_click=lambda _: self._close_about_dlg(), width=100, height=35),
             ],
             actions_alignment=ft.MainAxisAlignment.END,
             on_dismiss=lambda e: print("Modal dialog dismissed!"),
@@ -95,7 +95,7 @@ class Drawer(ft.NavigationDrawer):
         self.page.update()
         pass
 
-    def __close_about_dlg(self):
+    def _close_about_dlg(self):
 
         self.about_dialog.open = False
         self.page.update()
