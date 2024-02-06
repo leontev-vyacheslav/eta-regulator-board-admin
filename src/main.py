@@ -55,7 +55,7 @@ def main(page: ft.Page):
     page.add(
         ft.Row(
             controls=[
-                PageTitle(page=page, title='ETA RegulatorBoard Admin')
+                PageTitle(page=page, title='ETA Regulator Board Admin')
             ],
             vertical_alignment=ft.CrossAxisAlignment.START,
         ),

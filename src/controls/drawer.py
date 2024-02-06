@@ -128,7 +128,7 @@ class Drawer(ft.NavigationDrawer):
             content=ft.Row(
                 controls=[
                     ft.Image('src/assets/icon.ico'),
-                    ft.Text('ETA RegulatorBoard Admin v. 0.1' ),
+                    ft.Text('ETA Regulator Board Admin v. 0.1' ),
                 ], width=450
             ),
             actions=[
