@@ -4,7 +4,7 @@
 	  {
 		"label": "build",
 		"type": "shell",
-		"command": "cd src;flet build windows --module-name main.py --output ../native_build --project eta-regulator-board-admin;cd ..",
+		"command": "cd src;flet build windows --module-name main.py --output ../native_build --project eta-regulator-board-admin --company 'ETA Ltd';cd ..",
 		"args": [
 		],
 		"group": {

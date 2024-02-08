@@ -1,0 +1,30 @@
+[
+    {
+        "id": "2f1e50f1-c21f-443c-9590-3e6f72741c5b",
+        "name": "Omega-f7d3",
+        "mac_address": "ad:34:d5:a7:f7:d3",
+        "master_key": "rgi289SuCWElMAwPCfxnpD8sSj0Y+Q13jAmYWyZgJdI=",
+        "creation_date": "2024-02-07T12:32:06.553260"
+    },
+    {
+        "id": "728522a1-9da8-4e67-b9e7-0b783431f63f",
+        "name": "Omega-4567",
+        "mac_address": "23:45:67:89:01:23",
+        "master_key": "25mJIpGNGMO3yiSwX4nFywW+FiDnoFhF7KzcKYeYCvw=",
+        "creation_date": "2024-02-06T12:37:44.561396"
+    },
+    {
+        "id": "54bc98fe-fb23-4971-a7a3-09cbae72aa64",
+        "name": "omega-8f79",
+        "mac_address": "40:a3:6b:c9:8f:7a",
+        "master_key": "XAMhI3XWj+PaXP5nRQ+nNpEn9DKyHPTVa95i89UZL6o=",
+        "creation_date": "2024-02-06T12:32:06.553260"
+    },
+    {
+        "id": "9ee97d14-e299-4d41-83d7-200bbd7f02f5",
+        "name": "Omega-8f79-devcontainer--",
+        "mac_address": "02:42:ac:11:00:02",
+        "master_key": "XAMhI3XWj+PaXP5nRQ+nNpEn9DKyHPTVa95i89UZL6o=",
+        "creation_date": "2024-02-06T12:32:10.127719"
+    }
+]

@@ -2,6 +2,8 @@ import flet as ft
 from flet_core.margin import Margin
 from flet_core.alignment import Alignment
 
+from utils.debugging import is_debug
+
 
 class DrawerHeader(ft.Container):
 
@@ -19,7 +21,7 @@ class DrawerHeader(ft.Container):
                             height=60,
                             alignment=Alignment(-1, 0),
                             content=ft.Row(controls=[
-                                ft.Image(src='src/assets/icon.ico'),
+                                ft.Image(src='src/assets/icon.ico' if is_debug() else  'assets/icon.ico'),
                                 ft.Divider(thickness=5, visible=True),
                                 ft.Text(
                                     'ETA24™',

@@ -1,4 +1,3 @@
-from datetime import datetime, timedelta
 import flet as ft
 
 from controls.drawer import Drawer
@@ -9,39 +8,17 @@ from models.regulator_device_model import RegulatorDeviceModel
 
 
 def main(page: ft.Page):
-
-    page.theme = ft.Theme(color_scheme_seed=ft.colors.INDIGO)
-    page.app_list_view = ft.Ref[ft.ListView]()
-
     page.window_title_bar_hidden = True
     page.window_title_bar_buttons_hidden = True
+    page.update()
+    
+    page.theme = ft.Theme(color_scheme_seed=ft.colors.INDIGO)
+    page.app_list_view = ft.Ref[ft.ListView]()
+    page.app_md_view_ref = ft.Ref[ft.Markdown]()
+
     page.window_width = 1024
     page.window_min_width = 640
     page.window_max_width = 1024
-
-    # devices = page.client_storage.get('devices')
-    # if devices is not None:
-
-    #   devices = [RegulatorDeviceModel(
-    #       id=d['id'],
-    #       name=d['name'],
-    #       mac_address=d['mac_address'],
-    #       master_key=d['master_key'],
-    #       creation_date=datetime.now()
-    #     ) for d in devices]
-
-    #   for i, d in enumerate(devices):
-    #       d.creation_date = datetime.now() + timedelta(days=i)
-
-    # page.client_storage.set('devices',
-    #     [{
-    #         'id': d.id,
-    #         'name': d.name,
-    #         'mac_address': d.mac_address,
-    #         'master_key': d.master_key,
-    #         'creation_date': d.creation_date.isoformat()
-    #     }
-    #     for d in devices])
 
 
     if page.client_storage.get('theme_mode'):
@@ -68,8 +45,30 @@ def main(page: ft.Page):
             ],
             expand=True,
             vertical_alignment=ft.CrossAxisAlignment.STRETCH
+        ),
+        ft.Divider(thickness=2),
+        ft.Row(
+            controls=[
+                ft.Column(
+                    [ft.Markdown(
+                        ref=page.app_md_view_ref,
+                        value='',
+                        selectable=True,
+                        extension_set="gitHubWeb",
+                        code_theme="atom-one-light",
+                        code_style=ft.TextStyle(font_family="Roboto Mono"),
+                        expand=False,
+                    )],
+                    expand=True,
+                    scroll=ft.ScrollMode.ADAPTIVE,
+                )
+            ],
+            vertical_alignment=ft.CrossAxisAlignment.END,
+            expand=False,
+            height=150
         )
     )
+
 
 
 if __name__ == '__main__':

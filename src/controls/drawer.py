@@ -1,10 +1,13 @@
+import os
+import signal
 import flet as ft
 import json
 import pathlib
+import subprocess
 
 from controls.drawer_header import DrawerHeader
 from controls.regulator_device_edit_dialog import RegulatorDeviceEditDialog
-from models.regulator_device_model import RegulatorDeviceModel
+from utils.debugging import is_debug
 
 
 class Drawer(ft.NavigationDrawer):
@@ -23,6 +26,11 @@ class Drawer(ft.NavigationDrawer):
             ft.ListView(
                 ref=self.listRef,
                 controls=[
+                    ft.ListTile(
+                        leading=ft.Icon(ft.icons.TERMINAL),
+                        title=ft.Text('Test shell'),
+                        on_click=lambda _: self._test_shell(),
+                    ),
                     ft.ListTile(
                         leading=ft.Icon(ft.icons.DEVICES),
                         title=ft.Text('Add device'),
@@ -62,6 +70,28 @@ class Drawer(ft.NavigationDrawer):
         current_theme = ft.ThemeMode(self.page.client_storage.get('theme_mode'))
         self.themeItemRef.current.value = 'Light Theme' if current_theme == ft.ThemeMode.DARK else 'Dark Theme'
         self.themeIconRef.current.name = ft.icons.LIGHT_MODE_OUTLINED if current_theme == ft.ThemeMode.DARK else ft.icons.DARK_MODE_OUTLINED
+
+    def _test_shell(self):
+
+        try:
+            shell_process = subprocess.Popen(
+                ['pwsh', '-File', 'src/assets/test.ps1' if is_debug() else  'assets/test.ps1'],
+                stdout=subprocess.PIPE,
+                stdin=subprocess.PIPE,
+                text=True,
+                shell=True
+            )
+
+            while True:
+                output = shell_process.stdout.readline()
+                if not output:
+                    break
+                print(output.strip())
+                self.page.app_md_view_ref.current.value += output.strip() + '\n\n'
+                self.page.app_md_view_ref.current.update()
+        finally:
+            shell_process.kill()
+
 
     def _upload_devices(self):
         def _open_devices_callback(e: ft.FilePickerResultEvent):
@@ -127,7 +157,7 @@ class Drawer(ft.NavigationDrawer):
             title_padding = 18,
             content=ft.Row(
                 controls=[
-                    ft.Image('src/assets/icon.ico'),
+                    ft.Image('src/assets/icon.ico' if is_debug() else 'assets/icon.ico'),
                     ft.Text('ETA Regulator Board Admin v. 0.1' ),
                 ], width=450
             ),
